@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AntioqAPP — Descubre Antioquia</title>
+  <link rel="stylesheet" href="css/estilos.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+
+  <!-- ============================================================
+       NAVEGACIÓN
+       ============================================================ -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <svg viewBox="0 0 32 32" fill="currentColor"><path d="M16 2L3 7v10c0 8.5 5.5 16.5 13 18 7.5-1.5 13-9.5 13-18V7L16 2z"/><circle cx="16" cy="14" r="4" fill="white"/><path d="M12 20h8v2h-8z" fill="white"/></svg>
+        AntioqAPP
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="activo">Inicio</a></li>
+        <li><a href="rutas.html">Rutas</a></li>
+        <li><a href="eventos.html">Eventos</a></li>
+        <li><a href="negocios.html">Negocios</a></li>
+        <li><a href="reservas.html">Mis Reservas</a></li>
+        <li><a href="login.html" id="nav-auth-btn" class="nav-btn">Iniciar Sesión</a></li>
+      </ul>
+      <button class="nav-hamburger" onclick="toggleMenuMovil()" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="nav-movil" id="menu-movil">
+      <a href="index.html">Inicio</a>
+      <a href="rutas.html">Rutas</a>
+      <a href="eventos.html">Eventos</a>
+      <a href="negocios.html">Negocios</a>
+      <a href="reservas.html">Mis Reservas</a>
+      <a href="login.html" id="nav-auth-btn-movil" class="nav-btn" style="text-align:center;">Iniciar Sesión</a>
+    </div>
+  </nav>
+
+  <!-- ============================================================
+       HERO
+       ============================================================ -->
+  <section class="hero">
+    <div class="contenedor">
+      <div style="max-width: 680px;">
+        <h1 class="hero-titulo">Descubre la auténtica<br>Antioquia 🌿</h1>
+        <p class="hero-subtitulo">Explora rutas culturales, eventos únicos y negocios locales diseñados para conectarte con la verdadera esencia de nuestra región.</p>
+
+        <!-- Barra de búsqueda rápida -->
+        <div class="hero-buscador">
+          <input type="text" id="busqueda-hero" placeholder="¿Qué experiencia buscas?" style="color: var(--texto);" />
+          <select id="tipo-hero" style="color: var(--texto);">
+            <option value="">Tipo de experiencia</option>
+            <option value="rutas">Rutas Turísticas</option>
+            <option value="eventos">Eventos</option>
+            <option value="negocios">Negocios</option>
+          </select>
+          <button class="btn btn-primario" onclick="buscarDesdeHero()">
+            <i class="fas fa-search"></i> Buscar
+          </button>
+        </div>
+
+        <!-- Estadísticas -->
+        <div class="hero-stats">
+          <div>
+            <div class="hero-stat-numero">9+</div>
+            <div class="hero-stat-label">Rutas turísticas</div>
+          </div>
+          <div>
+            <div class="hero-stat-numero">5+</div>
+            <div class="hero-stat-label">Eventos activos</div>
+          </div>
+          <div>
+            <div class="hero-stat-numero">9+</div>
+            <div class="hero-stat-label">Negocios locales</div>
+          </div>
+          <div>
+            <div class="hero-stat-numero">500+</div>
+            <div class="hero-stat-label">Viajeros felices</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       RUTAS DESTACADAS (carrusel)
+       ============================================================ -->
+  <section class="seccion" style="background: var(--verde-suave);">
+    <div class="contenedor">
+      <div class="flex-entre mb-6">
+        <div>
+          <h2 class="seccion-titulo">Rutas Destacadas</h2>
+          <p class="seccion-subtitulo" style="margin-bottom:0;">Experiencias premium seleccionadas para ti</p>
+        </div>
+        <a href="rutas.html" class="btn btn-secundario">Ver todas <i class="fas fa-arrow-right"></i></a>
+      </div>
+
+      <div class="carrusel-wrapper">
+        <div class="carrusel-pista" id="carrusel-rutas"></div>
+        <button class="carrusel-btn carrusel-btn-izq" id="rutas-izq"><i class="fas fa-chevron-left"></i></button>
+        <button class="carrusel-btn carrusel-btn-der" id="rutas-der"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       EVENTOS PRÓXIMOS
+       ============================================================ -->
+  <section class="seccion">
+    <div class="contenedor">
+      <div class="flex-entre mb-6">
+        <div>
+          <h2 class="seccion-titulo">Próximos Eventos</h2>
+          <p class="seccion-subtitulo" style="margin-bottom:0;">No te pierdas lo que está pasando en Antioquia</p>
+        </div>
+        <a href="eventos.html" class="btn btn-secundario">Ver todos <i class="fas fa-arrow-right"></i></a>
+      </div>
+
+      <div class="grilla grilla-3" id="grid-eventos-home"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       NEGOCIOS DESTACADOS
+       ============================================================ -->
+  <section class="seccion" style="background: var(--fondo);">
+    <div class="contenedor">
+      <div class="flex-entre mb-6">
+        <div>
+          <h2 class="seccion-titulo">Negocios Locales</h2>
+          <p class="seccion-subtitulo" style="margin-bottom:0;">Apoya el emprendimiento antioqueño</p>
+        </div>
+        <a href="negocios.html" class="btn btn-secundario">Ver directorio <i class="fas fa-arrow-right"></i></a>
+      </div>
+
+      <div class="grilla grilla-3" id="grid-negocios-home"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       LLAMADA A LA ACCIÓN (CTA)
+       ============================================================ -->
+  <section style="background: linear-gradient(135deg, var(--verde-oscuro), var(--verde)); color: white; padding: 4rem 0; text-align: center;">
+    <div class="contenedor">
+      <h2 class="seccion-titulo" style="color: white; margin-bottom: 0.75rem;">¿Listo para tu próxima aventura?</h2>
+      <p style="opacity: 0.85; margin-bottom: 2rem; font-size: 1.05rem;">Crea tu cuenta gratis y empieza a reservar experiencias únicas hoy mismo.</p>
+      <div class="flex-centro gap-3 flex-envolver">
+        <a href="registro.html" class="btn btn-dorado">
+          <i class="fas fa-user-plus"></i> Crear cuenta gratis
+        </a>
+        <a href="rutas.html" class="btn btn-secundario" style="border-color: white; color: white;">
+          <i class="fas fa-map"></i> Explorar rutas
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer class="footer">
+    <div class="contenedor">
+      <div class="footer-grilla">
+        <div>
+          <div class="footer-logo">
+            <svg width="28" height="28" viewBox="0 0 32 32" fill="currentColor"><path d="M16 2L3 7v10c0 8.5 5.5 16.5 13 18 7.5-1.5 13-9.5 13-18V7L16 2z"/><circle cx="16" cy="14" r="4" fill="rgba(255,255,255,0.5)"/></svg>
+            AntioqAPP
+          </div>
+          <p class="footer-descripcion">Descubre la auténtica cultura de Antioquia. Rutas, eventos y negocios locales en un solo lugar.</p>
+          <div class="redes">
+            <a href="#" class="red-btn"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="red-btn"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="red-btn"><i class="fab fa-tiktok"></i></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Explorar</h4>
+          <ul>
+            <li><a href="rutas.html">Rutas Turísticas</a></li>
+            <li><a href="eventos.html">Eventos</a></li>
+            <li><a href="negocios.html">Negocios</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Mi Cuenta</h4>
+          <ul>
+            <li><a href="login.html">Iniciar Sesión</a></li>
+            <li><a href="registro.html">Registrarse</a></li>
+            <li><a href="reservas.html">Mis Reservas</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contacto</h4>
+          <ul>
+            <li><a href="#">info@antioqapp.co</a></li>
+            <li><a href="#">+57 (4) 123 4567</a></li>
+            <li><a href="#">Medellín, Antioquia</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-base">© 2025 AntioqAPP. Todos los derechos reservados.</div>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       SCRIPTS
+       ============================================================ -->
+  <script src="js/auth.js"></script>
+  <script src="js/datos.js"></script>
+  <script src="js/reservas.js"></script>
+  <script src="js/ui.js"></script>
+  <script>
+    /* ----------------------------------------------------------
+       RENDERIZAR CARRUSEL DE RUTAS DESTACADAS
+       ---------------------------------------------------------- */
+    function renderCarruselRutas() {
+      const pista = document.getElementById('carrusel-rutas');
+      const rutas = obtenerRutasDestacadas();
+      pista.innerHTML = rutas.map(r => `
+        <div class="carrusel-item">
+          <div class="card relativo">
+            <img class="card-img card-img-grande" src="${r.imagen}" alt="${r.titulo}"
+              onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=800';" />
+            <button class="card-fav ${esFavRuta(r.id) ? 'guardado' : ''}"
+              data-fav-ruta="${r.id}" onclick="toggleFavRuta('${r.id}')">
+              <i class="${esFavRuta(r.id) ? 'fas' : 'far'} fa-heart"></i>
+            </button>
+            <span class="card-badge badge-verde">${r.tipo}</span>
+            <div class="card-cuerpo">
+              <h3 class="card-titulo">${r.titulo}</h3>
+              <div class="card-meta"><i class="fas fa-map-marker-alt"></i>${r.ubicacion}</div>
+              <div class="card-meta"><i class="fas fa-clock"></i>${r.duracion} &nbsp;·&nbsp; <i class="fas fa-users"></i>${r.grupo}</div>
+              <div class="flex-entre mt-4">
+                <div>
+                  <div class="card-precio">${r.precio}</div>
+                  <div class="rating" style="margin-top:2px;">
+                    <i class="fas fa-star"></i>${r.calificacion}
+                    <span>(${r.resenas} reseñas)</span>
+                  </div>
+                </div>
+                <a href="rutas.html" class="btn btn-primario btn-sm">Ver ruta</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      new Carrusel('carrusel-rutas', 'rutas-izq', 'rutas-der');
+    }
+
+    /* ----------------------------------------------------------
+       RENDERIZAR EVENTOS EN HOME (solo los 3 destacados)
+       ---------------------------------------------------------- */
+    function renderEventosHome() {
+      const grid = document.getElementById('grid-eventos-home');
+      const eventos = obtenerEventosDestacados().slice(0, 3);
+      grid.innerHTML = eventos.map(e => `
+        <div class="card relativo">
+          <img class="card-img" src="${e.imagen}" alt="${e.titulo}"
+            onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=800';" />
+          <span class="card-badge badge-naranja">${e.tipo}</span>
+          <button class="card-fav ${esFavEvento(e.id) ? 'guardado' : ''}"
+            data-fav-evento="${e.id}" onclick="toggleFavEvento('${e.id}')">
+            <i class="${esFavEvento(e.id) ? 'fas' : 'far'} fa-heart"></i>
+          </button>
+          <div class="card-cuerpo">
+            <h3 class="card-titulo">${e.titulo}</h3>
+            <div class="card-meta"><i class="fas fa-calendar"></i>${e.fecha}</div>
+            <div class="card-meta"><i class="fas fa-map-marker-alt"></i>${e.ubicacion}</div>
+            <div class="flex-entre mt-4">
+              <div class="card-precio">${e.precio}</div>
+              <a href="eventos.html" class="btn btn-naranja btn-sm">Ver evento</a>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    /* ----------------------------------------------------------
+       RENDERIZAR NEGOCIOS DESTACADOS EN HOME
+       ---------------------------------------------------------- */
+    function renderNegociosHome() {
+      const grid = document.getElementById('grid-negocios-home');
+      const negocios = obtenerNegociosDestacados().slice(0, 3);
+      grid.innerHTML = negocios.map(n => `
+        <div class="card relativo">
+          <img class="card-img" src="${n.imagen}" alt="${n.titulo}"
+            onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=800';" />
+          <span class="card-badge ${n.estadoActivo ? 'badge-verde' : 'badge-gris'}">${n.estado}</span>
+          <button class="card-fav ${esFavNegocio(n.id) ? 'guardado' : ''}"
+            data-fav-negocio="${n.id}" onclick="toggleFavNegocio('${n.id}')">
+            <i class="${esFavNegocio(n.id) ? 'fas' : 'far'} fa-heart"></i>
+          </button>
+          <div class="card-cuerpo">
+            <h3 class="card-titulo">${n.titulo}</h3>
+            <p class="card-subtitulo">${n.tipo} · ${n.precio}</p>
+            <div class="card-meta"><i class="fas fa-map-marker-alt"></i>${n.ubicacion}</div>
+            <div class="card-meta"><i class="fas fa-phone"></i>${n.telefono}</div>
+            <div class="flex-entre mt-4">
+              <div class="rating"><i class="fas fa-star"></i>${n.calificacion}</div>
+              <a href="negocios.html" class="btn btn-secundario btn-sm">Ver más</a>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    /* ----------------------------------------------------------
+       BÚSQUEDA DESDE HERO
+       ---------------------------------------------------------- */
+    function buscarDesdeHero() {
+      const tipo = document.getElementById('tipo-hero').value;
+      const paginas = { rutas: 'rutas.html', eventos: 'eventos.html', negocios: 'negocios.html' };
+      window.location.href = paginas[tipo] || 'rutas.html';
+    }
+
+    /* ----------------------------------------------------------
+       INICIALIZAR
+       ---------------------------------------------------------- */
+    document.addEventListener('DOMContentLoaded', function() {
+      renderCarruselRutas();
+      renderEventosHome();
+      renderNegociosHome();
+    });
+  </script>
+</body>
+</html>

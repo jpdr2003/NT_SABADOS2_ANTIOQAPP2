@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rutas Turísticas — AntioqAPP</title>
+  <link rel="stylesheet" href="css/estilos.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+
+  <!-- NAVEGACIÓN -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <svg viewBox="0 0 32 32" fill="currentColor"><path d="M16 2L3 7v10c0 8.5 5.5 16.5 13 18 7.5-1.5 13-9.5 13-18V7L16 2z"/><circle cx="16" cy="14" r="4" fill="white"/><path d="M12 20h8v2h-8z" fill="white"/></svg>
+        AntioqAPP
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="rutas.html" class="activo">Rutas</a></li>
+        <li><a href="eventos.html">Eventos</a></li>
+        <li><a href="negocios.html">Negocios</a></li>
+        <li><a href="reservas.html">Mis Reservas</a></li>
+        <li><a href="login.html" id="nav-auth-btn" class="nav-btn">Iniciar Sesión</a></li>
+      </ul>
+      <button class="nav-hamburger" onclick="toggleMenuMovil()"><span></span><span></span><span></span></button>
+    </div>
+    <div class="nav-movil" id="menu-movil">
+      <a href="index.html">Inicio</a>
+      <a href="rutas.html">Rutas</a>
+      <a href="eventos.html">Eventos</a>
+      <a href="negocios.html">Negocios</a>
+      <a href="reservas.html">Mis Reservas</a>
+      <a href="login.html" class="nav-btn" style="text-align:center;">Iniciar Sesión</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" style="padding: 3rem 0;">
+    <div class="contenedor">
+      <h1 class="hero-titulo" style="font-size: clamp(1.8rem,5vw,2.8rem);">Rutas Turísticas</h1>
+      <p class="hero-subtitulo">Explora Antioquia a través de experiencias culturales auténticas</p>
+      <!-- Buscador rápido -->
+      <div class="hero-buscador" style="max-width: 560px;">
+        <input type="text" id="buscador" placeholder="Buscar ruta..." oninput="filtrarRutas()" style="color:var(--texto);" />
+        <select id="filtro-tipo" onchange="filtrarRutas()" style="color:var(--texto);">
+          <option value="">Todos los tipos</option>
+          <option value="cultural">Cultural</option>
+          <option value="gastronomica">Gastronómica</option>
+          <option value="artesanal">Artesanal</option>
+          <option value="naturaleza">Naturaleza</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="seccion">
+    <div class="contenedor">
+      <div class="layout-con-sidebar">
+
+        <!-- SIDEBAR DE FILTROS -->
+        <aside class="sidebar">
+          <div class="sidebar-titulo">
+            Filtros
+            <button class="btn btn-sm" style="color:var(--verde);" onclick="limpiarFiltros()">
+              <i class="fas fa-undo"></i> Limpiar
+            </button>
+          </div>
+
+          <div class="sidebar-seccion">
+            <h4>Tipo de Ruta</h4>
+            <label class="opcion"><input type="checkbox" value="cultural"     onchange="filtrarRutas()"> <span>Patrimonio Cultural</span></label>
+            <label class="opcion"><input type="checkbox" value="gastronomica" onchange="filtrarRutas()"> <span>Gastronómica</span></label>
+            <label class="opcion"><input type="checkbox" value="artesanal"    onchange="filtrarRutas()"> <span>Artesanal</span></label>
+            <label class="opcion"><input type="checkbox" value="naturaleza"   onchange="filtrarRutas()"> <span>Naturaleza</span></label>
+          </div>
+
+          <div class="sidebar-seccion">
+            <h4>Duración</h4>
+            <label class="opcion"><input type="radio" name="duracion" value=""> <span>Cualquiera</span></label>
+            <label class="opcion"><input type="radio" name="duracion" value="corta"> <span>Hasta 5 horas</span></label>
+            <label class="opcion"><input type="radio" name="duracion" value="media"> <span>6–8 horas</span></label>
+            <label class="opcion"><input type="radio" name="duracion" value="larga"> <span>Más de 8 horas</span></label>
+          </div>
+
+          <div class="sidebar-seccion">
+            <h4>Ordenar por</h4>
+            <select id="orden" onchange="filtrarRutas()" style="margin-top:0.25rem;">
+              <option value="">Recomendadas</option>
+              <option value="precio-asc">Precio: menor a mayor</option>
+              <option value="precio-desc">Precio: mayor a menor</option>
+              <option value="calificacion">Mejor calificación</option>
+            </select>
+          </div>
+
+          <button class="btn btn-primario btn-bloque" onclick="filtrarRutas()">
+            <i class="fas fa-filter"></i> Aplicar filtros
+          </button>
+        </aside>
+
+        <!-- GRILLA DE RUTAS -->
+        <div>
+          <div class="flex-entre mb-6">
+            <p id="contador" class="gris">Mostrando <strong>9</strong> rutas disponibles</p>
+          </div>
+          <div class="grilla grilla-3" id="grid-rutas"></div>
+          <p id="sin-resultados" class="oculto centrado gris" style="padding: 3rem 0; font-size: 1.1rem;">
+            <i class="fas fa-search" style="font-size:2rem; display:block; margin-bottom:0.75rem;"></i>
+            No encontramos rutas con esos filtros.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL DE DETALLE DE RUTA -->
+  <div class="modal-overlay" id="modal-ruta">
+    <div class="modal" style="max-width: 800px;">
+      <div class="modal-cabecera">
+        <h3 class="modal-titulo" id="modal-ruta-titulo">Detalle de Ruta</h3>
+        <button class="modal-cerrar" onclick="cerrarModal('modal-ruta')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-cuerpo" id="modal-ruta-contenido"></div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="contenedor">
+      <div class="footer-grilla">
+        <div>
+          <div class="footer-logo">
+            <svg width="28" height="28" viewBox="0 0 32 32" fill="currentColor"><path d="M16 2L3 7v10c0 8.5 5.5 16.5 13 18 7.5-1.5 13-9.5 13-18V7L16 2z"/></svg>
+            AntioqAPP
+          </div>
+          <p class="footer-descripcion">Descubre la auténtica cultura de Antioquia.</p>
+        </div>
+        <div class="footer-col"><h4>Explorar</h4><ul><li><a href="rutas.html">Rutas</a></li><li><a href="eventos.html">Eventos</a></li><li><a href="negocios.html">Negocios</a></li></ul></div>
+        <div class="footer-col"><h4>Mi Cuenta</h4><ul><li><a href="login.html">Iniciar Sesión</a></li><li><a href="registro.html">Registrarse</a></li><li><a href="reservas.html">Mis Reservas</a></li></ul></div>
+        <div class="footer-col"><h4>Contacto</h4><ul><li><a href="#">info@antioqapp.co</a></li></ul></div>
+      </div>
+      <div class="footer-base">© 2025 AntioqAPP. Todos los derechos reservados.</div>
+    </div>
+  </footer>
+
+  <script src="js/auth.js"></script>
+  <script src="js/datos.js"></script>
+  <script src="js/reservas.js"></script>
+  <script src="js/ui.js"></script>
+  <script>
+    /* ----------------------------------------------------------
+       RENDERIZAR TARJETA DE RUTA
+       ---------------------------------------------------------- */
+    function crearTarjetaRuta(r) {
+      const fav = esFavRuta(r.id);
+      return `
+        <div class="card relativo">
+          <img class="card-img" src="${r.imagen}" alt="${r.titulo}"
+            onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=800';" />
+          <span class="card-badge badge-verde">${r.tipo}</span>
+          <button class="card-fav ${fav ? 'guardado' : ''}" data-fav-ruta="${r.id}"
+            onclick="toggleFavRuta('${r.id}')">
+            <i class="${fav ? 'fas' : 'far'} fa-heart"></i>
+          </button>
+          <div class="card-cuerpo">
+            <h3 class="card-titulo">${r.titulo}</h3>
+            <div class="card-meta"><i class="fas fa-map-marker-alt"></i>${r.ubicacion}</div>
+            <div class="card-meta"><i class="fas fa-clock"></i>${r.duracion} &nbsp;·&nbsp; <i class="fas fa-users"></i>${r.grupo}</div>
+            <p style="font-size:0.82rem; color:var(--texto-gris); margin: 0.5rem 0 0.75rem;">${r.descripcion.substring(0,90)}...</p>
+            <div class="card-footer">
+              <div>
+                <div class="card-precio">${r.precio}</div>
+                <div class="rating"><i class="fas fa-star"></i>${r.calificacion} <span>(${r.resenas})</span></div>
+              </div>
+              <button class="btn btn-primario btn-sm" onclick="abrirDetalleRuta('${r.id}')">Ver detalles</button>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    /* ----------------------------------------------------------
+       FILTRAR Y RENDERIZAR RUTAS
+       ---------------------------------------------------------- */
+    function filtrarRutas() {
+      const texto   = document.getElementById('buscador')?.value.toLowerCase() || '';
+      const tipo    = document.getElementById('filtro-tipo')?.value || '';
+      const duracion = document.querySelector('input[name="duracion"]:checked')?.value || '';
+      const orden   = document.getElementById('orden')?.value || '';
+      const tiposCheck = [...document.querySelectorAll('.sidebar input[type="checkbox"]:checked')].map(cb => cb.value);
+
+      let resultado = [...RUTAS];
+
+      // Filtro por texto
+      if (texto) resultado = resultado.filter(r =>
+        r.titulo.toLowerCase().includes(texto) || r.ubicacion.toLowerCase().includes(texto)
+      );
+
+      // Filtro por tipo (select del hero o checkboxes del sidebar)
+      if (tipo) resultado = resultado.filter(r => r.tipo === tipo);
+      if (tiposCheck.length) resultado = resultado.filter(r => tiposCheck.includes(r.tipo));
+
+      // Filtro por duración
+      if (duracion === 'corta')  resultado = resultado.filter(r => r.precioNum <= 90000);
+      if (duracion === 'media')  resultado = resultado.filter(r => r.precioNum > 90000 && r.precioNum <= 120000);
+      if (duracion === 'larga')  resultado = resultado.filter(r => r.precioNum > 120000);
+
+      // Ordenar
+      if (orden === 'precio-asc')    resultado.sort((a,b) => a.precioNum - b.precioNum);
+      if (orden === 'precio-desc')   resultado.sort((a,b) => b.precioNum - a.precioNum);
+      if (orden === 'calificacion')  resultado.sort((a,b) => b.calificacion - a.calificacion);
+
+      const grid = document.getElementById('grid-rutas');
+      const sinRes = document.getElementById('sin-resultados');
+      const contador = document.getElementById('contador');
+
+      if (resultado.length === 0) {
+        grid.innerHTML = '';
+        sinRes.classList.remove('oculto');
+      } else {
+        grid.innerHTML = resultado.map(crearTarjetaRuta).join('');
+        sinRes.classList.add('oculto');
+        inicializarBotonesFav();
+      }
+      contador.innerHTML = `Mostrando <strong>${resultado.length}</strong> ruta${resultado.length !== 1 ? 's' : ''} disponible${resultado.length !== 1 ? 's' : ''}`;
+    }
+
+    function limpiarFiltros() {
+      document.getElementById('buscador').value = '';
+      document.getElementById('filtro-tipo').value = '';
+      document.getElementById('orden').value = '';
+      document.querySelectorAll('.sidebar input[type="checkbox"]').forEach(cb => cb.checked = false);
+      document.querySelectorAll('input[name="duracion"]').forEach(rb => rb.checked = false);
+      filtrarRutas();
+    }
+
+    /* ----------------------------------------------------------
+       MODAL DE DETALLE DE RUTA
+       ---------------------------------------------------------- */
+    function abrirDetalleRuta(id) {
+      const r = obtenerRuta(id);
+      if (!r) return;
+
+      document.getElementById('modal-ruta-titulo').textContent = r.titulo;
+      document.getElementById('modal-ruta-contenido').innerHTML = `
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem;">
+          <div>
+            <img src="${r.imagen}" alt="${r.titulo}" style="width:100%; height:240px; object-fit:cover; border-radius:var(--radio);"
+              onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=800';" />
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; margin-top:1rem;">
+              <div class="card-meta"><i class="fas fa-clock"></i>${r.duracion}</div>
+              <div class="card-meta"><i class="fas fa-users"></i>${r.grupo}</div>
+              <div class="card-meta"><i class="fas fa-star" style="color:var(--alerta);"></i>${r.calificacion} (${r.resenas})</div>
+              <div class="card-meta"><i class="fas fa-map-marker-alt"></i>${r.ubicacion}</div>
+            </div>
+          </div>
+          <div>
+            <h4 style="font-family:var(--fuente-titulo); color:var(--verde); margin-bottom:0.6rem;">Descripción</h4>
+            <p style="font-size:0.9rem; color:var(--texto-gris); line-height:1.7; margin-bottom:1.25rem;">${r.descripcion}</p>
+            <h4 style="font-family:var(--fuente-titulo); color:var(--verde); margin-bottom:0.6rem;">Incluye</h4>
+            <ul style="list-style:none; display:flex; flex-direction:column; gap:0.35rem;">
+              ${r.incluye.map(item => `
+                <li style="font-size:0.88rem; color:var(--texto-gris); display:flex; align-items:center; gap:0.4rem;">
+                  <i class="fas fa-check" style="color:var(--exito);"></i>${item}
+                </li>`).join('')}
+            </ul>
+          </div>
+        </div>
+        <div style="border-top:1.5px solid var(--borde); margin-top:1.5rem; padding-top:1.25rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+          <div>
+            <div style="font-size:1.6rem; font-weight:700; color:var(--verde);">${r.precio}</div>
+            <div style="font-size:0.82rem; color:var(--texto-gris);">por persona</div>
+          </div>
+          <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+            <button class="btn btn-secundario" onclick="toggleFavRuta('${r.id}'); this.innerHTML='<i class=\\'fas fa-heart\\'></i> Guardado';">
+              <i class="far fa-heart"></i> Guardar
+            </button>
+            <button class="btn btn-primario" onclick="reservarRuta('${r.id}')">
+              <i class="fas fa-calendar-check"></i> Reservar Ahora
+            </button>
+          </div>
+        </div>`;
+
+      abrirModal('modal-ruta');
+    }
+
+    /* ----------------------------------------------------------
+       RESERVAR RUTA DESDE EL MODAL
+       ---------------------------------------------------------- */
+    function reservarRuta(id) {
+      const r = obtenerRuta(id);
+      if (!r) return;
+      const reserva = crearReserva({
+        tipo: 'ruta', itemId: r.id, titulo: r.titulo,
+        precio: r.precio, precioNum: r.precioNum,
+        imagen: r.imagen, lugar: r.ubicacion
+      });
+      if (reserva) {
+        cerrarModal('modal-ruta');
+        mostrarToast(`¡Reserva confirmada para "${r.titulo}"! 🎉`, 'exito');
+        setTimeout(() => window.location.href = 'reservas.html', 1500);
+      }
+    }
+
+    /* ----------------------------------------------------------
+       INICIALIZAR
+       ---------------------------------------------------------- */
+    document.addEventListener('DOMContentLoaded', filtrarRutas);
+  </script>
+</body>
+</html>

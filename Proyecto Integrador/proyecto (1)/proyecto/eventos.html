@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eventos — AntioqAPP</title>
+  <link rel="stylesheet" href="css/estilos.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+
+  <!-- NAVEGACIÓN -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <svg viewBox="0 0 32 32" fill="currentColor"><path d="M16 2L3 7v10c0 8.5 5.5 16.5 13 18 7.5-1.5 13-9.5 13-18V7L16 2z"/><circle cx="16" cy="14" r="4" fill="white"/><path d="M12 20h8v2h-8z" fill="white"/></svg>
+        AntioqAPP
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="rutas.html">Rutas</a></li>
+        <li><a href="eventos.html" class="activo">Eventos</a></li>
+        <li><a href="negocios.html">Negocios</a></li>
+        <li><a href="reservas.html">Mis Reservas</a></li>
+        <li><a href="login.html" id="nav-auth-btn" class="nav-btn">Iniciar Sesión</a></li>
+      </ul>
+      <button class="nav-hamburger" onclick="toggleMenuMovil()"><span></span><span></span><span></span></button>
+    </div>
+    <div class="nav-movil" id="menu-movil">
+      <a href="index.html">Inicio</a>
+      <a href="rutas.html">Rutas</a>
+      <a href="eventos.html">Eventos</a>
+      <a href="negocios.html">Negocios</a>
+      <a href="reservas.html">Mis Reservas</a>
+      <a href="login.html" class="nav-btn" style="text-align:center;">Iniciar Sesión</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" style="padding: 3rem 0;">
+    <div class="contenedor">
+      <h1 class="hero-titulo" style="font-size: clamp(1.8rem,5vw,2.8rem);">Eventos & Festivales</h1>
+      <p class="hero-subtitulo">Descubre lo que está pasando en Antioquia</p>
+    </div>
+  </section>
+
+  <!-- FILTROS DE TIPO -->
+  <div style="background: var(--superficie); border-bottom: 1.5px solid var(--borde); padding: 1rem 0;">
+    <div class="contenedor">
+      <div class="filtros-barra" style="margin-bottom: 0;">
+        <button class="filtro-btn activo" onclick="filtrarPorTipo('', this)">Todos</button>
+        <button class="filtro-btn" onclick="filtrarPorTipo('festival', this)">
+          <i class="fas fa-music"></i> Festivales
+        </button>
+        <button class="filtro-btn" onclick="filtrarPorTipo('gastronomia', this)">
+          <i class="fas fa-utensils"></i> Gastronomía
+        </button>
+        <button class="filtro-btn" onclick="filtrarPorTipo('artesanal', this)">
+          <i class="fas fa-paint-brush"></i> Artesanal
+        </button>
+        <button class="filtro-btn" onclick="filtrarPorTipo('cultural', this)">
+          <i class="fas fa-landmark"></i> Cultural
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENIDO -->
+  <main class="seccion">
+    <div class="contenedor">
+
+      <!-- Eventos destacados (cards grandes) -->
+      <h2 class="seccion-titulo mb-6">Eventos Destacados</h2>
+      <div class="grilla grilla-3" id="grid-eventos" style="margin-bottom: 3rem;"></div>
+
+      <!-- Todos los eventos (lista compacta) -->
+      <h2 class="seccion-titulo mb-6">Todos los Eventos</h2>
+      <div id="lista-eventos"></div>
+
+      <p id="sin-eventos" class="oculto centrado gris" style="padding:3rem 0; font-size:1.1rem;">
+        <i class="fas fa-calendar-times" style="font-size:2rem; display:block; margin-bottom:.75rem;"></i>
+        No hay eventos con ese filtro.
+      </p>
+    </div>
+  </main>
+
+  <!-- MODAL DE DETALLE DE EVENTO -->
+  <div class="modal-overlay" id="modal-evento">
+    <div class="modal" style="max-width: 750px;">
+      <div class="modal-cabecera">
+        <h3 class="modal-titulo" id="modal-evento-titulo">Detalle del Evento</h3>
+        <button class="modal-cerrar" onclick="cerrarModal('modal-evento')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-cuerpo" id="modal-evento-contenido"></div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="contenedor">
+      <div class="footer-grilla">
+        <div><div class="footer-logo"><svg width="28" height="28" viewBox="0 0 32 32" fill="currentColor"><path d="M16 2L3 7v10c0 8.5 5.5 16.5 13 18 7.5-1.5 13-9.5 13-18V7L16 2z"/></svg>AntioqAPP</div><p class="footer-descripcion">Descubre la auténtica cultura de Antioquia.</p></div>
+        <div class="footer-col"><h4>Explorar</h4><ul><li><a href="rutas.html">Rutas</a></li><li><a href="eventos.html">Eventos</a></li><li><a href="negocios.html">Negocios</a></li></ul></div>
+        <div class="footer-col"><h4>Mi Cuenta</h4><ul><li><a href="login.html">Iniciar Sesión</a></li><li><a href="registro.html">Registrarse</a></li><li><a href="reservas.html">Mis Reservas</a></li></ul></div>
+        <div class="footer-col"><h4>Contacto</h4><ul><li><a href="#">info@antioqapp.co</a></li></ul></div>
+      </div>
+      <div class="footer-base">© 2025 AntioqAPP. Todos los derechos reservados.</div>
+    </div>
+  </footer>
+
+  <script src="js/auth.js"></script>
+  <script src="js/datos.js"></script>
+  <script src="js/reservas.js"></script>
+  <script src="js/ui.js"></script>
+  <script>
+    let tipoActivo = '';
+
+    /* ----------------------------------------------------------
+       RENDERIZAR GRILLA (cards destacados)
+       ---------------------------------------------------------- */
+    function crearTarjetaEvento(e) {
+      const fav = esFavEvento(e.id);
+      return `
+        <div class="card relativo">
+          <img class="card-img" src="${e.imagen}" alt="${e.titulo}"
+            onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=800';" />
+          <span class="card-badge badge-naranja">${e.tipo}</span>
+          <button class="card-fav ${fav ? 'guardado' : ''}" data-fav-evento="${e.id}"
+            onclick="toggleFavEvento('${e.id}')">
+            <i class="${fav ? 'fas' : 'far'} fa-heart"></i>
+          </button>
+          <div class="card-cuerpo">
+            <h3 class="card-titulo">${e.titulo}</h3>
+            <div class="card-meta"><i class="fas fa-calendar"></i>${e.fecha}</div>
+            <div class="card-meta"><i class="fas fa-clock"></i>${e.hora}</div>
+            <div class="card-meta"><i class="fas fa-map-marker-alt"></i>${e.ubicacion}</div>
+            <div class="card-footer">
+              <div>
+                <div class="card-precio">${e.precio}</div>
+                ${e.precioAnterior ? `<span style="font-size:0.78rem; color:var(--texto-gris); text-decoration:line-through;">${e.precioAnterior}</span>` : ''}
+              </div>
+              <button class="btn btn-naranja btn-sm" onclick="abrirDetalleEvento('${e.id}')">Ver más</button>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    /* ----------------------------------------------------------
+       RENDERIZAR LISTA (fila compacta para todos los eventos)
+       ---------------------------------------------------------- */
+    function crearFilaEvento(e) {
+      const fav = esFavEvento(e.id);
+      return `
+        <div class="card" style="display:flex; align-items:center; gap:1.25rem; padding:1rem; margin-bottom:0.75rem; border-radius:var(--radio);">
+          <img src="${e.imagen}" alt="${e.titulo}" style="width:90px; height:70px; object-fit:cover; border-radius:0.5rem; flex-shrink:0;"
+            onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=800';" />
+          <div style="flex:1; min-width:0;">
+            <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+              <h3 style="font-family:var(--fuente-titulo); color:var(--verde); font-size:1rem;">${e.titulo}</h3>
+              <span class="estado estado-confirmado" style="font-size:0.7rem;">${e.tipo}</span>
+            </div>
+            <div style="display:flex; gap:1rem; flex-wrap:wrap; margin-top:0.25rem;">
+              <span class="card-meta" style="margin:0;"><i class="fas fa-calendar"></i>${e.fecha}</span>
+              <span class="card-meta" style="margin:0;"><i class="fas fa-map-marker-alt"></i>${e.ubicacion}</span>
+            </div>
+          </div>
+          <div style="text-align:right; flex-shrink:0;">
+            <div class="card-precio" style="font-size:1rem;">${e.precio}</div>
+            <div style="display:flex; gap:0.4rem; margin-top:0.4rem;">
+              <button class="card-fav ${fav ? 'guardado' : ''}" data-fav-evento="${e.id}"
+                onclick="toggleFavEvento('${e.id}')" style="position:static; box-shadow:none; background:var(--fondo);">
+                <i class="${fav ? 'fas' : 'far'} fa-heart"></i>
+              </button>
+              <button class="btn btn-naranja btn-sm" onclick="abrirDetalleEvento('${e.id}')">Ver</button>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    /* ----------------------------------------------------------
+       FILTRAR POR TIPO
+       ---------------------------------------------------------- */
+    function filtrarPorTipo(tipo, btn) {
+      tipoActivo = tipo;
+      // Actualizar botones activos
+      document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('activo'));
+      btn.classList.add('activo');
+      renderEventos();
+    }
+
+    /* ----------------------------------------------------------
+       RENDERIZAR TODOS LOS EVENTOS
+       ---------------------------------------------------------- */
+    function renderEventos() {
+      let resultado = tipoActivo ? EVENTOS.filter(e => e.tipo === tipoActivo) : EVENTOS;
+
+      const gridDestacados = document.getElementById('grid-eventos');
+      const lista = document.getElementById('lista-eventos');
+      const sinEventos = document.getElementById('sin-eventos');
+
+      if (resultado.length === 0) {
+        gridDestacados.innerHTML = '';
+        lista.innerHTML = '';
+        sinEventos.classList.remove('oculto');
+        return;
+      }
+
+      sinEventos.classList.add('oculto');
+
+      // Grid: solo los destacados
+      const destacados = resultado.filter(e => e.destacado);
+      gridDestacados.innerHTML = destacados.map(crearTarjetaEvento).join('');
+
+      // Lista: todos
+      lista.innerHTML = resultado.map(crearFilaEvento).join('');
+
+      inicializarBotonesFav();
+    }
+
+    /* ----------------------------------------------------------
+       MODAL DE DETALLE DE EVENTO
+       ---------------------------------------------------------- */
+    function abrirDetalleEvento(id) {
+      const e = obtenerEvento(id);
+      if (!e) return;
+
+      document.getElementById('modal-evento-titulo').textContent = e.titulo;
+      document.getElementById('modal-evento-contenido').innerHTML = `
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
+          <img src="${e.imagen}" alt="${e.titulo}" style="width:100%; height:220px; object-fit:cover; border-radius:var(--radio); grid-row: span 2;"
+            onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=800';" />
+          <div>
+            <h4 style="font-family:var(--fuente-titulo); color:var(--verde); margin-bottom:0.75rem;">Información</h4>
+            <div class="card-meta"><i class="fas fa-calendar"></i>${e.fecha}</div>
+            <div class="card-meta"><i class="fas fa-clock"></i>${e.hora}</div>
+            <div class="card-meta"><i class="fas fa-map-marker-alt"></i>${e.ubicacion}</div>
+            <div class="card-meta"><i class="fas fa-ticket-alt"></i>${e.precio} por persona</div>
+            <div class="card-meta"><i class="fas fa-star" style="color:var(--alerta);"></i>${e.calificacion} calificación</div>
+          </div>
+        </div>
+        <div style="margin-top:1.25rem;">
+          <h4 style="font-family:var(--fuente-titulo); color:var(--verde); margin-bottom:0.5rem;">Descripción</h4>
+          <p style="font-size:0.9rem; color:var(--texto-gris); line-height:1.7;">${e.descripcion}</p>
+        </div>
+        <div style="margin-top:1.25rem;">
+          <h4 style="font-family:var(--fuente-titulo); color:var(--verde); margin-bottom:0.6rem;">Actividades incluidas</h4>
+          <div style="display:flex; flex-wrap:wrap; gap:0.5rem;">
+            ${e.actividades.map(a => `<span style="background:var(--verde-suave); color:var(--verde); padding:0.3rem 0.75rem; border-radius:99px; font-size:0.82rem; font-weight:500;">${a}</span>`).join('')}
+          </div>
+        </div>
+        <div style="border-top:1.5px solid var(--borde); margin-top:1.5rem; padding-top:1.25rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+          <div>
+            <div style="font-size:1.6rem; font-weight:700; color:var(--verde);">${e.precio}</div>
+            ${e.precioAnterior ? `<span style="font-size:0.82rem; color:var(--texto-gris); text-decoration:line-through;">${e.precioAnterior}</span>` : ''}
+          </div>
+          <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+            <button class="btn btn-secundario" onclick="toggleFavEvento('${e.id}')">
+              <i class="far fa-heart"></i> Guardar
+            </button>
+            <button class="btn btn-naranja" onclick="reservarEvento('${e.id}')">
+              <i class="fas fa-calendar-check"></i> Reservar Ahora
+            </button>
+          </div>
+        </div>`;
+
+      abrirModal('modal-evento');
+    }
+
+    /* ----------------------------------------------------------
+       RESERVAR EVENTO
+       ---------------------------------------------------------- */
+    function reservarEvento(id) {
+      const e = obtenerEvento(id);
+      if (!e) return;
+      const reserva = crearReserva({
+        tipo: 'evento', itemId: e.id, titulo: e.titulo,
+        precio: e.precio, precioNum: e.precioNum,
+        imagen: e.imagen, lugar: e.ubicacion, fecha: e.fecha, hora: e.hora
+      });
+      if (reserva) {
+        cerrarModal('modal-evento');
+        mostrarToast(`¡Reserva confirmada para "${e.titulo}"! 🎉`, 'exito');
+        setTimeout(() => window.location.href = 'reservas.html', 1500);
+      }
+    }
+
+    /* ----------------------------------------------------------
+       INICIALIZAR
+       ---------------------------------------------------------- */
+    document.addEventListener('DOMContentLoaded', renderEventos);
+  </script>
+</body>
+</html>

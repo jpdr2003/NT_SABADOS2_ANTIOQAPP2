@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Negocios — AntioqAPP</title>
+  <link rel="stylesheet" href="css/estilos.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+
+  <!-- NAVEGACIÓN -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <svg viewBox="0 0 32 32" fill="currentColor"><path d="M16 2L3 7v10c0 8.5 5.5 16.5 13 18 7.5-1.5 13-9.5 13-18V7L16 2z"/><circle cx="16" cy="14" r="4" fill="white"/><path d="M12 20h8v2h-8z" fill="white"/></svg>
+        AntioqAPP
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="rutas.html">Rutas</a></li>
+        <li><a href="eventos.html">Eventos</a></li>
+        <li><a href="negocios.html" class="activo">Negocios</a></li>
+        <li><a href="reservas.html">Mis Reservas</a></li>
+        <li><a href="login.html" id="nav-auth-btn" class="nav-btn">Iniciar Sesión</a></li>
+      </ul>
+      <button class="nav-hamburger" onclick="toggleMenuMovil()"><span></span><span></span><span></span></button>
+    </div>
+    <div class="nav-movil" id="menu-movil">
+      <a href="index.html">Inicio</a>
+      <a href="rutas.html">Rutas</a>
+      <a href="eventos.html">Eventos</a>
+      <a href="negocios.html">Negocios</a>
+      <a href="reservas.html">Mis Reservas</a>
+      <a href="login.html" class="nav-btn" style="text-align:center;">Iniciar Sesión</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" style="padding: 3rem 0;">
+    <div class="contenedor">
+      <h1 class="hero-titulo" style="font-size: clamp(1.8rem,5vw,2.8rem);">Directorio de Negocios</h1>
+      <p class="hero-subtitulo">Encuentra y apoya el emprendimiento local antioqueño</p>
+      <div class="hero-buscador" style="max-width: 500px;">
+        <input type="text" id="buscador" placeholder="Buscar negocio o ubicación..." oninput="filtrarNegocios()" style="color:var(--texto);" />
+      </div>
+    </div>
+  </section>
+
+  <!-- FILTROS -->
+  <div style="background: var(--superficie); border-bottom: 1.5px solid var(--borde); padding: 1rem 0;">
+    <div class="contenedor">
+      <div class="filtros-barra" style="margin-bottom:0;">
+        <button class="filtro-btn activo" onclick="filtrarPorTipo('', this)">Todos</button>
+        <button class="filtro-btn" onclick="filtrarPorTipo('restaurante', this)"><i class="fas fa-utensils"></i> Restaurantes</button>
+        <button class="filtro-btn" onclick="filtrarPorTipo('hotel', this)"><i class="fas fa-hotel"></i> Hoteles</button>
+        <button class="filtro-btn" onclick="filtrarPorTipo('artesanias', this)"><i class="fas fa-paint-brush"></i> Artesanías</button>
+        <button class="filtro-btn" onclick="filtrarPorTipo('tour', this)"><i class="fas fa-binoculars"></i> Tours</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENIDO -->
+  <main class="seccion">
+    <div class="contenedor">
+      <div class="layout-con-sidebar">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+          <div class="sidebar-titulo">Filtros</div>
+
+          <div class="sidebar-seccion">
+            <h4>Precio</h4>
+            <label class="opcion"><input type="checkbox" value="$"   onchange="filtrarNegocios()"> <span>$ Económico</span></label>
+            <label class="opcion"><input type="checkbox" value="$$"  onchange="filtrarNegocios()"> <span>$$ Moderado</span></label>
+            <label class="opcion"><input type="checkbox" value="$$$" onchange="filtrarNegocios()"> <span>$$$ Premium</span></label>
+          </div>
+
+          <div class="sidebar-seccion">
+            <h4>Ubicación</h4>
+            <label class="opcion"><input type="checkbox" value="Medellín"          onchange="filtrarNegocios()"> <span>Medellín</span></label>
+            <label class="opcion"><input type="checkbox" value="Guatapé"           onchange="filtrarNegocios()"> <span>Guatapé</span></label>
+            <label class="opcion"><input type="checkbox" value="Jardín"            onchange="filtrarNegocios()"> <span>Jardín</span></label>
+            <label class="opcion"><input type="checkbox" value="Santa Fe de Antioquia" onchange="filtrarNegocios()"> <span>Santa Fe de Antioquia</span></label>
+            <label class="opcion"><input type="checkbox" value="Jericó"            onchange="filtrarNegocios()"> <span>Jericó</span></label>
+            <label class="opcion"><input type="checkbox" value="Rionegro"          onchange="filtrarNegocios()"> <span>Rionegro</span></label>
+          </div>
+
+          <div class="sidebar-seccion">
+            <h4>Calificación mínima</h4>
+            <select id="min-calificacion" onchange="filtrarNegocios()" style="margin-top:0.25rem;">
+              <option value="0">Cualquiera</option>
+              <option value="4">4+ estrellas</option>
+              <option value="4.5">4.5+ estrellas</option>
+            </select>
+          </div>
+
+          <button class="btn btn-secundario btn-bloque" onclick="limpiarFiltros()">
+            <i class="fas fa-undo"></i> Limpiar filtros
+          </button>
+        </aside>
+
+        <!-- GRILLA DE NEGOCIOS -->
+        <div>
+          <div class="flex-entre mb-6">
+            <p id="contador" class="gris">Mostrando <strong>9</strong> negocios</p>
+          </div>
+          <div class="grilla grilla-3" id="grid-negocios"></div>
+          <p id="sin-negocios" class="oculto centrado gris" style="padding:3rem 0; font-size:1.1rem;">
+            <i class="fas fa-store-slash" style="font-size:2rem; display:block; margin-bottom:.75rem;"></i>
+            No encontramos negocios con esos filtros.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL DE DETALLE DE NEGOCIO -->
+  <div class="modal-overlay" id="modal-negocio">
+    <div class="modal" style="max-width: 680px;">
+      <div class="modal-cabecera">
+        <h3 class="modal-titulo" id="modal-negocio-titulo">Detalle del Negocio</h3>
+        <button class="modal-cerrar" onclick="cerrarModal('modal-negocio')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-cuerpo" id="modal-negocio-contenido"></div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="contenedor">
+      <div class="footer-grilla">
+        <div><div class="footer-logo"><svg width="28" height="28" viewBox="0 0 32 32" fill="currentColor"><path d="M16 2L3 7v10c0 8.5 5.5 16.5 13 18 7.5-1.5 13-9.5 13-18V7L16 2z"/></svg>AntioqAPP</div><p class="footer-descripcion">Descubre la auténtica cultura de Antioquia.</p></div>
+        <div class="footer-col"><h4>Explorar</h4><ul><li><a href="rutas.html">Rutas</a></li><li><a href="eventos.html">Eventos</a></li><li><a href="negocios.html">Negocios</a></li></ul></div>
+        <div class="footer-col"><h4>Mi Cuenta</h4><ul><li><a href="login.html">Iniciar Sesión</a></li><li><a href="registro.html">Registrarse</a></li><li><a href="reservas.html">Mis Reservas</a></li></ul></div>
+        <div class="footer-col"><h4>Contacto</h4><ul><li><a href="#">info@antioqapp.co</a></li></ul></div>
+      </div>
+      <div class="footer-base">© 2025 AntioqAPP. Todos los derechos reservados.</div>
+    </div>
+  </footer>
+
+  <script src="js/auth.js"></script>
+  <script src="js/datos.js"></script>
+  <script src="js/reservas.js"></script>
+  <script src="js/ui.js"></script>
+  <script>
+    let tipoActivo = '';
+
+    /* ----------------------------------------------------------
+       RENDERIZAR TARJETA DE NEGOCIO
+       ---------------------------------------------------------- */
+    function crearTarjetaNegocio(n) {
+      const fav = esFavNegocio(n.id);
+      return `
+        <div class="card relativo">
+          <img class="card-img" src="${n.imagen}" alt="${n.titulo}"
+            onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=800';" />
+          <span class="card-badge ${n.estadoActivo ? 'badge-verde' : 'badge-gris'}">${n.estado}</span>
+          <button class="card-fav ${fav ? 'guardado' : ''}" data-fav-negocio="${n.id}"
+            onclick="toggleFavNegocio('${n.id}')">
+            <i class="${fav ? 'fas' : 'far'} fa-heart"></i>
+          </button>
+          <div class="card-cuerpo">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+              <h3 class="card-titulo" style="flex:1;">${n.titulo}</h3>
+              <span style="font-weight:700; color:var(--texto-gris); font-size:0.9rem; margin-left:0.5rem;">${n.precio}</span>
+            </div>
+            <p class="card-subtitulo">${n.tipo} · ${n.ubicacion}</p>
+            <div class="card-meta"><i class="fas fa-phone"></i>${n.telefono}</div>
+            <div class="card-meta"><i class="fas fa-clock"></i>${n.horario}</div>
+            <div class="card-footer">
+              <div class="rating"><i class="fas fa-star"></i>${n.calificacion}</div>
+              <button class="btn btn-secundario btn-sm" onclick="abrirDetalleNegocio('${n.id}')">Ver más</button>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    /* ----------------------------------------------------------
+       FILTRAR NEGOCIOS
+       ---------------------------------------------------------- */
+    function filtrarPorTipo(tipo, btn) {
+      tipoActivo = tipo;
+      document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('activo'));
+      btn.classList.add('activo');
+      filtrarNegocios();
+    }
+
+    function filtrarNegocios() {
+      const texto    = document.getElementById('buscador')?.value.toLowerCase() || '';
+      const precios  = [...document.querySelectorAll('.sidebar input[type="checkbox"][value^="$"]:checked')].map(cb => cb.value);
+      const locs     = [...document.querySelectorAll('.sidebar input[type="checkbox"]:not([value^="$"]):checked')].map(cb => cb.value);
+      const minCal   = parseFloat(document.getElementById('min-calificacion')?.value || 0);
+
+      let resultado = [...NEGOCIOS];
+
+      if (tipoActivo)      resultado = resultado.filter(n => n.tipo === tipoActivo);
+      if (texto)           resultado = resultado.filter(n => n.titulo.toLowerCase().includes(texto) || n.ubicacion.toLowerCase().includes(texto));
+      if (precios.length)  resultado = resultado.filter(n => precios.includes(n.precio));
+      if (locs.length)     resultado = resultado.filter(n => locs.includes(n.ubicacion));
+      if (minCal > 0)      resultado = resultado.filter(n => n.calificacion >= minCal);
+
+      const grid = document.getElementById('grid-negocios');
+      const sinRes = document.getElementById('sin-negocios');
+      const contador = document.getElementById('contador');
+
+      if (resultado.length === 0) {
+        grid.innerHTML = '';
+        sinRes.classList.remove('oculto');
+      } else {
+        grid.innerHTML = resultado.map(crearTarjetaNegocio).join('');
+        sinRes.classList.add('oculto');
+        inicializarBotonesFav();
+      }
+      contador.innerHTML = `Mostrando <strong>${resultado.length}</strong> negocio${resultado.length !== 1 ? 's' : ''}`;
+    }
+
+    function limpiarFiltros() {
+      document.getElementById('buscador').value = '';
+      document.getElementById('min-calificacion').value = '0';
+      document.querySelectorAll('.sidebar input[type="checkbox"]').forEach(cb => cb.checked = false);
+      tipoActivo = '';
+      document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('activo'));
+      document.querySelector('.filtro-btn').classList.add('activo');
+      filtrarNegocios();
+    }
+
+    /* ----------------------------------------------------------
+       MODAL DE DETALLE DE NEGOCIO
+       ---------------------------------------------------------- */
+    function abrirDetalleNegocio(id) {
+      const n = obtenerNegocio(id);
+      if (!n) return;
+
+      document.getElementById('modal-negocio-titulo').textContent = n.titulo;
+      document.getElementById('modal-negocio-contenido').innerHTML = `
+        <img src="${n.imagen}" alt="${n.titulo}" style="width:100%; height:220px; object-fit:cover; border-radius:var(--radio); margin-bottom:1.25rem;"
+          onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=800';" />
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1.25rem;">
+          <div>
+            <h4 style="font-family:var(--fuente-titulo); color:var(--verde); margin-bottom:0.6rem;">Información</h4>
+            <div class="card-meta"><i class="fas fa-map-marker-alt"></i>${n.direccion}</div>
+            <div class="card-meta"><i class="fas fa-clock"></i>${n.horario}</div>
+            <div class="card-meta"><i class="fas fa-phone"></i><a href="tel:${n.telefono}" style="color:var(--verde);">${n.telefono}</a></div>
+            <div class="card-meta"><i class="fas fa-star" style="color:var(--alerta);"></i>${n.calificacion} estrellas</div>
+          </div>
+          <div>
+            <h4 style="font-family:var(--fuente-titulo); color:var(--verde); margin-bottom:0.6rem;">Sobre el Negocio</h4>
+            <p style="font-size:0.88rem; color:var(--texto-gris); line-height:1.7;">${n.descripcion}</p>
+          </div>
+        </div>
+        <div style="display:flex; gap:0.75rem; flex-wrap:wrap; border-top:1.5px solid var(--borde); padding-top:1.25rem;">
+          <a href="tel:${n.telefono}" class="btn btn-primario flex-1" style="justify-content:center;">
+            <i class="fas fa-phone"></i> Llamar
+          </a>
+          <button class="btn btn-secundario flex-1" onclick="toggleFavNegocio('${n.id}')">
+            <i class="far fa-heart"></i> Guardar
+          </button>
+          <button class="modal-cerrar" onclick="cerrarModal('modal-negocio')" style="padding:0.6rem 1rem; border:1.5px solid var(--borde); border-radius:var(--radio); color:var(--texto-gris);">
+            Cerrar
+          </button>
+        </div>`;
+
+      abrirModal('modal-negocio');
+    }
+
+    /* ----------------------------------------------------------
+       INICIALIZAR
+       ---------------------------------------------------------- */
+    document.addEventListener('DOMContentLoaded', filtrarNegocios);
+  </script>
+</body>
+</html>

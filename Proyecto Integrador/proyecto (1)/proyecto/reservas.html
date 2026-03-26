@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mis Reservas — AntioqAPP</title>
+  <link rel="stylesheet" href="css/estilos.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+
+  <!-- NAVEGACIÓN -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <svg viewBox="0 0 32 32" fill="currentColor"><path d="M16 2L3 7v10c0 8.5 5.5 16.5 13 18 7.5-1.5 13-9.5 13-18V7L16 2z"/><circle cx="16" cy="14" r="4" fill="white"/><path d="M12 20h8v2h-8z" fill="white"/></svg>
+        AntioqAPP
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="rutas.html">Rutas</a></li>
+        <li><a href="eventos.html">Eventos</a></li>
+        <li><a href="negocios.html">Negocios</a></li>
+        <li><a href="reservas.html" class="activo">Mis Reservas</a></li>
+        <li><button onclick="cerrarSesion()" class="nav-btn btn" style="font-size:0.88rem;"><i class="fas fa-sign-out-alt"></i> Salir</button></li>
+      </ul>
+      <button class="nav-hamburger" onclick="toggleMenuMovil()"><span></span><span></span><span></span></button>
+    </div>
+    <div class="nav-movil" id="menu-movil">
+      <a href="index.html">Inicio</a>
+      <a href="rutas.html">Rutas</a>
+      <a href="eventos.html">Eventos</a>
+      <a href="negocios.html">Negocios</a>
+      <button onclick="cerrarSesion()" style="text-align:left; padding:0.65rem 0.75rem; color:var(--error); font-size:0.95rem;">
+        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" style="padding: 2.5rem 0;">
+    <div class="contenedor">
+      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+        <div>
+          <h1 class="hero-titulo" style="font-size: clamp(1.6rem,4vw,2.4rem);">Mis Reservas</h1>
+          <p class="hero-subtitulo" style="margin-bottom:0;">Gestiona todas tus experiencias en un solo lugar</p>
+        </div>
+        <div style="display:flex; align-items:center; gap:1rem; background:rgba(255,255,255,0.15); padding:1rem 1.25rem; border-radius:var(--radio-grande);">
+          <div style="width:44px; height:44px; background:rgba(255,255,255,0.2); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">
+            <i class="fas fa-user"></i>
+          </div>
+          <div>
+            <div style="font-weight:600;" id="usuario-nombre">—</div>
+            <div style="font-size:0.82rem; opacity:0.8;" id="usuario-email">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ESTADÍSTICAS -->
+  <div style="background: var(--superficie); border-bottom: 1.5px solid var(--borde); padding: 1.5rem 0;">
+    <div class="contenedor">
+      <div class="stats-grilla">
+        <div class="stat-card">
+          <div class="stat-numero verde" id="stat-activas">—</div>
+          <div class="stat-label">Reservas Activas</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-numero" style="color:var(--exito);" id="stat-completadas">—</div>
+          <div class="stat-label">Completadas</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-numero" style="color:#7a5c00;" id="stat-pendientes">—</div>
+          <div class="stat-label">Pendientes</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-numero" style="color:var(--naranja);" id="stat-total">—</div>
+          <div class="stat-label">Total Invertido</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="seccion">
+    <div class="contenedor">
+
+      <!-- Barra de filtros y acciones -->
+      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem;">
+        <div style="display:flex; gap:0.75rem; flex-wrap:wrap; align-items:center;">
+          <select id="filtro-estado" onchange="renderReservas()" style="width:auto;">
+            <option value="">Todos los estados</option>
+            <option value="confirmado">Confirmadas</option>
+            <option value="pendiente">Pendientes</option>
+            <option value="completado">Completadas</option>
+            <option value="cancelado">Canceladas</option>
+          </select>
+          <input type="text" id="buscador-reservas" placeholder="Buscar reserva..." oninput="renderReservas()"
+            style="width:200px;" />
+        </div>
+        <a href="rutas.html" class="btn btn-naranja">
+          <i class="fas fa-plus"></i> Nueva Reserva
+        </a>
+      </div>
+
+      <!-- Tarjetas de reservas -->
+      <div class="grilla grilla-2" id="grid-reservas"></div>
+
+      <!-- Estado vacío -->
+      <div id="sin-reservas" class="oculto" style="text-align:center; padding:4rem 0;">
+        <i class="fas fa-calendar-times" style="font-size:3rem; color:var(--borde); display:block; margin-bottom:1rem;"></i>
+        <p style="font-size:1.1rem; color:var(--texto-gris); margin-bottom:1.5rem;">No tienes reservas aún.</p>
+        <a href="rutas.html" class="btn btn-primario">
+          <i class="fas fa-map"></i> Explorar Rutas
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- MODAL DE DETALLE DE RESERVA -->
+  <div class="modal-overlay" id="modal-detalle-reserva">
+    <div class="modal">
+      <div class="modal-cabecera">
+        <h3 class="modal-titulo">Detalle de Reserva</h3>
+        <button class="modal-cerrar" onclick="cerrarModal('modal-detalle-reserva')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-cuerpo" id="modal-detalle-contenido"></div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="contenedor">
+      <div class="footer-grilla">
+        <div><div class="footer-logo"><svg width="28" height="28" viewBox="0 0 32 32" fill="currentColor"><path d="M16 2L3 7v10c0 8.5 5.5 16.5 13 18 7.5-1.5 13-9.5 13-18V7L16 2z"/></svg>AntioqAPP</div><p class="footer-descripcion">Descubre la auténtica cultura de Antioquia.</p></div>
+        <div class="footer-col"><h4>Explorar</h4><ul><li><a href="rutas.html">Rutas</a></li><li><a href="eventos.html">Eventos</a></li><li><a href="negocios.html">Negocios</a></li></ul></div>
+        <div class="footer-col"><h4>Mi Cuenta</h4><ul><li><a href="reservas.html">Mis Reservas</a></li></ul></div>
+        <div class="footer-col"><h4>Contacto</h4><ul><li><a href="#">info@antioqapp.co</a></li></ul></div>
+      </div>
+      <div class="footer-base">© 2025 AntioqAPP. Todos los derechos reservados.</div>
+    </div>
+  </footer>
+
+  <script src="js/auth.js"></script>
+  <script src="js/datos.js"></script>
+  <script src="js/reservas.js"></script>
+  <script src="js/ui.js"></script>
+  <script>
+    /* ----------------------------------------------------------
+       CONFIGURACIÓN VISUAL DE ESTADOS
+       ---------------------------------------------------------- */
+    const ESTADOS = {
+      confirmado: { clase: 'estado-confirmado', icono: 'fa-check-circle',  texto: 'Confirmado' },
+      pendiente:  { clase: 'estado-pendiente',  icono: 'fa-clock',         texto: 'Pendiente' },
+      completado: { clase: 'estado-completado', icono: 'fa-star',          texto: 'Completado' },
+      cancelado:  { clase: 'estado-cancelado',  icono: 'fa-times-circle',  texto: 'Cancelado' }
+    };
+
+    /* ----------------------------------------------------------
+       ACCIONES SEGÚN ESTADO
+       ---------------------------------------------------------- */
+    function accionesPorEstado(r) {
+      switch (r.estado) {
+        case 'confirmado':
+          return `
+            <button class="btn btn-secundario btn-sm" onclick="abrirDetalle('${r.id}')">
+              <i class="fas fa-eye"></i> Detalles
+            </button>
+            <button class="btn btn-peligro btn-sm" onclick="confirmarCancelacion('${r.id}')">
+              <i class="fas fa-times"></i> Cancelar
+            </button>`;
+        case 'pendiente':
+          return `
+            <button class="btn btn-primario btn-sm" onclick="procesarPago('${r.id}')">
+              <i class="fas fa-credit-card"></i> Pagar
+            </button>
+            <button class="btn btn-peligro btn-sm" onclick="confirmarCancelacion('${r.id}')">
+              <i class="fas fa-times"></i> Cancelar
+            </button>`;
+        case 'completado':
+          return `
+            <button class="btn btn-secundario btn-sm" onclick="abrirDetalle('${r.id}')">
+              <i class="fas fa-eye"></i> Ver
+            </button>`;
+        case 'cancelado':
+          return `
+            <button class="btn btn-primario btn-sm" onclick="reservarDeNuevo('${r.id}')">
+              <i class="fas fa-redo"></i> Reservar de nuevo
+            </button>`;
+        default: return '';
+      }
+    }
+
+    /* ----------------------------------------------------------
+       CREAR TARJETA DE RESERVA
+       ---------------------------------------------------------- */
+    function crearTarjetaReserva(r) {
+      const estado = ESTADOS[r.estado] || ESTADOS.pendiente;
+      const imagenDefault = 'https://images.pexels.com/photos/1386604/pexels-photo-1386604.jpeg?auto=compress&cs=tinysrgb&w=800';
+
+      return `
+        <div class="card" style="display:flex; flex-direction:column;">
+          <div style="position:relative;">
+            <img src="${r.imagen || imagenDefault}" alt="${r.titulo}" class="card-img"
+              onerror="this.src='${imagenDefault}';" />
+            <span class="estado ${estado.clase}" style="position:absolute; top:0.75rem; right:0.75rem;">
+              <i class="fas ${estado.icono}"></i> ${estado.texto}
+            </span>
+          </div>
+          <div class="card-cuerpo" style="flex:1; display:flex; flex-direction:column;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.75rem;">
+              <div>
+                <h3 class="card-titulo" style="margin-bottom:0.15rem;">${r.titulo}</h3>
+                <p class="gris pequeno">${r.proveedor || 'AntioqAPP'}</p>
+              </div>
+              <button onclick="abrirDetalle('${r.id}')" style="color:var(--verde); font-size:0.85rem; padding:0.3rem;">
+                <i class="fas fa-external-link-alt"></i>
+              </button>
+            </div>
+            <div class="card-meta"><i class="fas fa-calendar"></i>${r.fecha}${r.hora ? ' · ' + r.hora : ''}</div>
+            <div class="card-meta"><i class="fas fa-users"></i>${r.personas} persona${r.personas > 1 ? 's' : ''}</div>
+            ${r.lugar ? `<div class="card-meta"><i class="fas fa-map-marker-alt"></i>${r.lugar}</div>` : ''}
+            <div class="card-meta"><i class="fas fa-tag"></i>${r.precio}
+              <span style="margin-left:0.5rem; color:${r.estado === 'pendiente' ? 'var(--alerta)' : 'var(--exito)'}; font-weight:500;">
+                ${r.estado === 'pendiente' ? '— Pendiente de pago' : r.estado === 'cancelado' ? '— Cancelado' : '— Pagado'}
+              </span>
+            </div>
+            ${r.codigoConfirmacion ? `
+              <div style="background:var(--verde-suave); border-radius:var(--radio); padding:0.6rem 0.85rem; margin:0.75rem 0; font-size:0.82rem; color:var(--verde); font-weight:600;">
+                <i class="fas fa-qrcode"></i> ${r.codigoConfirmacion}
+              </div>` : ''}
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:auto; padding-top:0.75rem;">
+              ${accionesPorEstado(r)}
+            </div>
+          </div>
+        </div>`;
+    }
+
+    /* ----------------------------------------------------------
+       RENDERIZAR RESERVAS (con filtros)
+       ---------------------------------------------------------- */
+    function renderReservas() {
+      const estadoFiltro = document.getElementById('filtro-estado')?.value || '';
+      const busqueda     = document.getElementById('buscador-reservas')?.value.toLowerCase() || '';
+
+      let reservas = obtenerMisReservas();
+
+      if (estadoFiltro) reservas = reservas.filter(r => r.estado === estadoFiltro);
+      if (busqueda) reservas = reservas.filter(r =>
+        r.titulo.toLowerCase().includes(busqueda) ||
+        (r.codigoConfirmacion || '').toLowerCase().includes(busqueda)
+      );
+
+      const grid = document.getElementById('grid-reservas');
+      const sinRes = document.getElementById('sin-reservas');
+
+      if (reservas.length === 0) {
+        grid.innerHTML = '';
+        sinRes.classList.remove('oculto');
+      } else {
+        grid.innerHTML = reservas.map(crearTarjetaReserva).join('');
+        sinRes.classList.add('oculto');
+      }
+
+      // Actualizar estadísticas
+      const stats = obtenerEstadisticas();
+      document.getElementById('stat-activas').textContent    = stats.activas;
+      document.getElementById('stat-completadas').textContent = stats.completadas;
+      document.getElementById('stat-pendientes').textContent  = stats.pendientes;
+      document.getElementById('stat-total').textContent       = '$' + stats.totalGastado.toLocaleString('es-CO');
+    }
+
+    /* ----------------------------------------------------------
+       CONFIRMAR CANCELACIÓN
+       ---------------------------------------------------------- */
+    function confirmarCancelacion(id) {
+      if (!confirm('¿Estás seguro de que deseas cancelar esta reserva?')) return;
+      if (cancelarReserva(id)) {
+        mostrarToast('Reserva cancelada.', 'aviso');
+        renderReservas();
+      }
+    }
+
+    /* ----------------------------------------------------------
+       PAGAR RESERVA
+       ---------------------------------------------------------- */
+    function procesarPago(id) {
+      if (pagarReserva(id)) {
+        mostrarToast('¡Pago procesado! Reserva confirmada ✅', 'exito');
+        renderReservas();
+      }
+    }
+
+    /* ----------------------------------------------------------
+       RESERVAR DE NUEVO
+       ---------------------------------------------------------- */
+    function reservarDeNuevo(id) {
+      const todas   = obtenerReservas();
+      const original = todas.find(r => r.id === id);
+      if (!original) return;
+
+      const nueva = crearReserva({
+        tipo:      original.tipo,
+        itemId:    original.itemId,
+        titulo:    original.titulo,
+        proveedor: original.proveedor,
+        precio:    original.precio,
+        precioNum: original.precioNum,
+        imagen:    original.imagen,
+        lugar:     original.lugar
+      });
+
+      if (nueva) {
+        mostrarToast(`¡Nueva reserva creada para "${original.titulo}"! 🎉`, 'exito');
+        renderReservas();
+      }
+    }
+
+    /* ----------------------------------------------------------
+       ABRIR DETALLE DE RESERVA EN MODAL
+       ---------------------------------------------------------- */
+    function abrirDetalle(id) {
+      const r = obtenerReservas().find(rv => rv.id === id);
+      if (!r) return;
+
+      const estado = ESTADOS[r.estado] || ESTADOS.pendiente;
+      document.getElementById('modal-detalle-contenido').innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:1.25rem;">
+          <div class="alerta alerta-${r.estado === 'confirmado' ? 'exito' : r.estado === 'pendiente' ? 'aviso' : r.estado === 'cancelado' ? 'error' : 'info'}">
+            <i class="fas ${estado.icono}"></i>
+            Estado: <strong>${estado.texto}</strong>
+          </div>
+          <div>
+            <h4 style="font-family:var(--fuente-titulo); color:var(--verde); margin-bottom:0.6rem;">Experiencia</h4>
+            <div class="card-meta"><i class="fas fa-tag"></i>${r.titulo}</div>
+            <div class="card-meta"><i class="fas fa-building"></i>${r.proveedor || 'AntioqAPP'}</div>
+            <div class="card-meta"><i class="fas fa-calendar"></i>${r.fecha}</div>
+            ${r.hora ? `<div class="card-meta"><i class="fas fa-clock"></i>${r.hora}</div>` : ''}
+            ${r.lugar ? `<div class="card-meta"><i class="fas fa-map-marker-alt"></i>${r.lugar}</div>` : ''}
+            <div class="card-meta"><i class="fas fa-users"></i>${r.personas} persona${r.personas > 1 ? 's' : ''}</div>
+          </div>
+          <div>
+            <h4 style="font-family:var(--fuente-titulo); color:var(--verde); margin-bottom:0.6rem;">Pago</h4>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem; background:var(--verde-suave); border-radius:var(--radio);">
+              <span style="font-weight:600;">Total:</span>
+              <span style="font-size:1.2rem; font-weight:700; color:var(--verde);">${r.precio}</span>
+            </div>
+          </div>
+          ${r.codigoConfirmacion ? `
+          <div>
+            <h4 style="font-family:var(--fuente-titulo); color:var(--verde); margin-bottom:0.6rem;">Código de Confirmación</h4>
+            <div style="background:var(--fondo); border:1.5px solid var(--borde); border-radius:var(--radio); padding:0.75rem; font-family:monospace; font-size:1rem; letter-spacing:0.05em; text-align:center; color:var(--verde); font-weight:700;">
+              ${r.codigoConfirmacion}
+            </div>
+          </div>` : ''}
+        </div>`;
+
+      abrirModal('modal-detalle-reserva');
+    }
+
+    /* ----------------------------------------------------------
+       INICIALIZAR
+       ---------------------------------------------------------- */
+    document.addEventListener('DOMContentLoaded', function() {
+      // Verificar que el usuario esté logueado
+      if (!requerirLogin()) return;
+
+      const sesion = obtenerSesion();
+
+      // Mostrar datos del usuario en el hero
+      document.getElementById('usuario-nombre').textContent = sesion.nombre;
+      document.getElementById('usuario-email').textContent  = sesion.email;
+
+      // Cargar reservas demo para el usuario (si aún no las tiene)
+      cargarReservasDemo(sesion.usuarioId);
+
+      // Renderizar
+      renderReservas();
+    });
+  </script>
+</body>
+</html>
