@@ -11,6 +11,7 @@ def generar_simulacion_ruta(numeroSimulaciones):
     fechaInicio = datetime(2026, 1, 2)
 
     simulaciones = []
+    
     for _ in range(numeroSimulaciones):
         simulacion = {
             "id": str(random.randint(1, 200)),  # PK como string

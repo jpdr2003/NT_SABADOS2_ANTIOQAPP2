@@ -16,7 +16,7 @@ def limpiar_sesiones(data_frame_sucio):
     # definir valores de String esperados
     valores_vaidos_perfil= ["vips", "editor", "viewer"]
     data_frame_limpio["perfil"] = data_frame_limpio["perfil"].where(
-        data_frame_limpio["perfil"].isin("valores_validos_perfil"),
+        data_frame_limpio["perfil"].isin(valores_vaidos_perfil),
         pd.NA
     )
 
