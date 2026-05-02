@@ -1,52 +1,64 @@
-import pandas as pd
+import random
+import uuid
 
-# Implementar lógica de limpieza de datos
-def limpiar_datos(data_frame_sucio):
+from datetime import datetime, timedelta
 
-    # 1 Limpiar columnas STRING del DF
-    data_frame_limpio = data_frame_sucio.copy()
-    columnas_texto = ["id", "usuarioId", "itemId", "tipo", "titulo",
-                      "proveedor", "precio", "estado", "hora",
-                      "lugar", "codigoConfirmacion"]
+def generar_simulacion_reservas(numeroSimulaciones):
 
-    for columna in columnas_texto:
-        data_frame_limpio[columna] = data_frame_limpio[columna].astype("string").str.strip().str.lower()
+    tipos = ["ruta", "evento"]
+    titulos = ["Ruta Cafetera", "Festival de Flores", "Sendero El Poblado"]
+    proveedores = ["Turismo Antioquia", "Eventos Medellín", "Guias Locales"]
+    estados = ["confirmado", "pendiente", "completado", "cancelado"]
+    precios = ["$50,000", "$120,000", "$200,000"]
+    preciosNum = [50000, 120000, 200000]
+    horas = ["08:00", "10:30", "14:00", "16:00"]
+    lugares = ["Medellín", "Guatapé", "Santa Fe de Antioquia"]
+    fechaInicio = datetime(2026, 1, 2)
 
-    # 1.1 Definir valores String esperados
-    valores_validos_tipo = ["ruta", "evento"]
-    valores_validos_estado = ["confirmado", "pendiente", "completado", "cancelado"]
+    simulaciones = []
+    for _ in range(numeroSimulaciones):
 
-    data_frame_limpio["tipo"] = data_frame_limpio["tipo"].where(
-        data_frame_limpio["tipo"].isin(valores_validos_tipo),
-        pd.NA
-    )
+        precioIndex = random.randint(0, len(precios) - 1)
 
-    data_frame_limpio["estado"] = data_frame_limpio["estado"].where(
-        data_frame_limpio["estado"].isin(valores_validos_estado),
-        pd.NA
-    )
+        simulacion = {
+            "id": str(uuid.uuid4()),
+            "usuarioId": str(uuid.uuid4()),
+            "itemId": str(uuid.uuid4()),
+            "tipo": random.choice(tipos),
+            "titulo": random.choice(titulos),
+            "proveedor": random.choice(proveedores),
+            "precio": precios[precioIndex],
+            "precioNum": preciosNum[precioIndex],
+            "estado": random.choice(estados),
+            "fecha": (fechaInicio + timedelta(days=random.randint(0, 60))).strftime("%Y-%m-%d"),
+            "hora": random.choice(horas),
+            "personas": random.randint(1, 10),
+            "lugar": random.choice(lugares),
+            "codigoConfirmacion": "CONF-" + str(random.randint(1000, 9999)),
+            "creadoEn": datetime.now().isoformat()
+        }
 
-    # 2. Limpiar columnas numericas del DF
-    data_frame_limpio["precioNum"] = pd.to_numeric(data_frame_limpio["precioNum"], errors="coerce")
-    data_frame_limpio["personas"] = pd.to_numeric(data_frame_limpio["personas"], errors="coerce")
+        # Inyectando errores controlados
+        probabilidadError = random.random()
+        if probabilidadError < 0.15:
+            simulacion["id"] = None
+        elif probabilidadError < 0.30:
+            simulacion["tipo"] = random.choice(["hotel", "restaurante"])
+        elif probabilidadError < 0.45:
+            simulacion["precioNum"] = random.choice([0, -5000, None])
+        elif probabilidadError < 0.60:
+            simulacion["estado"] = random.choice(["archivado", "borrador"])
+        elif probabilidadError < 0.75:
+            simulacion["usuarioId"] = "  " + simulacion["usuarioId"].upper() + "  "
+        elif probabilidadError < 0.85:
+            simulacion["fecha"] = None
+        elif probabilidadError < 0.95:
+            simulacion["personas"] = random.choice([0, -1, None])
 
-    # 2.1 Limpiando campos numericos que no tengan valores validos
-    data_frame_limpio = data_frame_limpio[data_frame_limpio["precioNum"] > 0]
-    data_frame_limpio = data_frame_limpio[data_frame_limpio["personas"] > 0]
+        simulaciones.append(simulacion)
+    return simulaciones
 
-    # 3 Organizar las columnas de tipo FECHA
-    data_frame_limpio["fecha"] = pd.to_datetime(data_frame_limpio["fecha"], errors="coerce")
-
-    # 3.1 Si la fecha no existe se remplaza por un valor por defecto
-    fecha_default = pd.to_datetime("2026-01-01")
-    data_frame_limpio["fecha"] = data_frame_limpio["fecha"].fillna(fecha_default)
-
-    # 4 Eliminar registros que tengan datos obligatorios faltantes
-    columnas_obligatorias = ["id", "usuarioId", "itemId", "tipo", "precioNum",
-                             "estado", "fecha", "personas"]
-    data_frame_limpio = data_frame_limpio.dropna(subset=columnas_obligatorias)
-
-    # 5 Eliminar registros duplicados
-    data_frame_limpio = data_frame_limpio.drop_duplicates()
-
-    return data_frame_limpio
+# Generar y mostrar datos simulados
+datos_simulados = generar_simulacion_reservas(5)
+for d in datos_simulados:
+    print(d)    

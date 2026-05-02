@@ -38,3 +38,7 @@ def generar_simulacion(numeroSimulaciones):
 
         simulaciones.append(simulacion)
     return simulaciones
+
+datos_simulados = generar_simulacion(1)
+for d in datos_simulados:
+    print(d)
