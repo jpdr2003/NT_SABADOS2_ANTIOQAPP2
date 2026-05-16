@@ -5,7 +5,7 @@ def limpiar_datos(data_frame_sucio):
 
     # 1 Limpiar columnas STRING del DF
     data_frame_limpio = data_frame_sucio.copy()
-    columnas_texto = ["id", "usuarioId", "itemId", "tipo", "titulo",
+    columnas_texto = ["id", "musuario", "itemId", "tipo", "titulo",
                       "proveedor", "precio", "estado", "hora",
                       "lugar", "codigoConfirmacion"]
 
@@ -42,7 +42,7 @@ def limpiar_datos(data_frame_sucio):
     data_frame_limpio["fecha"] = data_frame_limpio["fecha"].fillna(fecha_default)
 
     # 4 Eliminar registros que tengan datos obligatorios faltantes
-    columnas_obligatorias = ["id", "usuarioId", "itemId", "tipo", "precioNum",
+    columnas_obligatorias = ["id", "musuario", "itemId", "tipo", "precioNum",
                              "estado", "fecha", "personas"]
     data_frame_limpio = data_frame_limpio.dropna(subset=columnas_obligatorias)
 
