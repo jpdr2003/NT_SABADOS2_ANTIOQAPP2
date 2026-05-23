@@ -1,8 +1,8 @@
 import pandas as pd
 
-from notebook.consumo import consumir_api
+from notebook.consumo_reservas import consumir_api
 from notebook.transformacion_Reservas import transformar_datos
-from notebook.limpiezaReservas import limpiar_datos
+from limpiezaReservas import limpiar_datos
 
 
 datos_tabla_reservas = consumir_api()
