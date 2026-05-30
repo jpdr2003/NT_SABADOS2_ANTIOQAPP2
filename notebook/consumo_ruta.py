@@ -3,7 +3,7 @@ import re
 import json
 
 def consumir_api():
-    url="http://localhost:8082/usuarios"
+    url="http://localhost:8082/rutas"
     respuesta=requests.get(url)
     respuesta.raise_for_status()
     texto = re.sub(r'\bNaN\b', 'null', respuesta.text)
