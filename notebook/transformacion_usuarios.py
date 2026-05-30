@@ -13,7 +13,7 @@ def transformar_datos(data_frame_limpio):
     agrupacion3 = filtro3.groupby("perfil")["id"].count().reset_index(name="conteo")
 
     # Transformación 4 (promedio de longitud de contraseña por perfil)
-    filtro4 = data_frame_limpio.query("clave != ''")
+    filtro4 = data_frame_limpio.query("clave != ''").copy()
     filtro4["longitud_clave"] = filtro4["clave"].str.len()
     agrupacion4 = filtro4.groupby("perfil")["longitud_clave"].mean().reset_index(name="promedio_longitud")
 

@@ -1,7 +1,7 @@
 import requests
 
 def consumir_api():
-    url="http://localhost:8082/sesion"
+    url="http://localhost:8082/sesiones"
     respuesta=requests.get(url)
     respuesta.raise_for_status()  
     datos=respuesta.json()  
